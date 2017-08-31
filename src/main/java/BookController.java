@@ -36,10 +36,9 @@ public class BookController {
 
             ResultSet result = statement.executeQuery("SELECT * FROM bookshelf.books;");
 
-            int count = 0;
             while (result.next()) {
-                list = list.concat("<a href=" + result.getString("link") + "> " + result.getString("title") + "</a>" + "<br>");
-                count++;
+                list = list.concat("<a href=" + "http://localhost:8080/book/" + result.getString("id") + "> " + result.getString("title") + "</a>  ");
+                list = list.concat("<a href=" + "http://localhost:8080/book/delete/" + result.getString("id") + ">" + "delete" + "</a>"  + "<br>");
             }
             connection.close();
 
@@ -75,16 +74,26 @@ public class BookController {
             return book;
     }
 
+    @RequestMapping("book/delete/{id}")
+    @ResponseBody
+    String delete(@PathVariable("id") String id) {
+        try {
+            Driver driver = new FabricMySQLDriver();
+            DriverManager.registerDriver(driver);
+            connection = DriverManager.getConnection(URL, username, password);
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("DELETE FROM bookshelf.books WHERE id =" + id + ";");
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return getAllList();
+    }
+
     @RequestMapping("book/create")
     @ResponseBody
     String create() {
         return "You created new book";
-    }
-
-    @RequestMapping("book/delete")
-    @ResponseBody
-    String delete() {
-        return "You successfully deleted this book";
     }
 
     @RequestMapping("book/update")
