@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Update your book</h1>
+
+<form name='mainForm' action='/book/update/{{book.id}}' enctype="multipart/form-data" method="post">
+    Title:<br>
+    <input type="text" name="title" value="{{book.title}}">
+    <br>
+    Author:<br>
+    <input type="text" name="author" value="{{book.author}}">
+    <br>
+    Link:<br>
+    <input type="text" name="link" value="{{book.link}}">
+    <br>
+    Published_year:<br>
+    <input type="text" name="year" value="{{book.year}}">
+    <br>
+    <input type="submit" name="submit" value="UPDATE"/>
+</form>
+
+</body>
+</html>

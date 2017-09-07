@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>{{book.title}}</h1>
+
+<ul>
+    <li><b>Рік видання:</b> {{book.year}}</li>
+    <li><b>Автор:</b> {{book.author}}</li>
+</ul>
+
+{% if (book.link != null) %}
+     <p>Детальна інформація <a href = "{{book.link}}">тут</a>.</p>
+{% else %}
+     <p>{{book.title}}</p>
+{% endif %}
+<p>Turn to book <a href="http://localhost:8080/book/list">list</a>? </p>
+
+</body>
+</html>

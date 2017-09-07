@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+
+{% for book in books %}
+<a href="{{book.link}}" >{{book.title}}</a>
+<form name='mainForm' action='{{book.deleteLink}}' enctype="multipart/form-data">
+    <input type="hidden" name="_method" value="DELETE"/>
+    <input type="submit" name="submit" value="DELETE"/>
+    <br>
+</form>
+<a href="{{book.updateLink}}" >UPDATE</a><br>
+
+{% endfor %}
+<a href="/book/create">Create new book.</a>
+
+</body>
+</html>
