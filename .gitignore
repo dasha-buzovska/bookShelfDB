@@ -1,7 +1,10 @@
 .gradle
 .idea
-build
+build/classes/main/BookController.class
+build/classes/main/BookShelf.class
+build/classes/main/Test.class
 gradle
 out
 gradlew
 gradlew.bat
+src/main/java/Test.java
