@@ -9,7 +9,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -120,6 +123,59 @@ public class BookController {
             e.printStackTrace();
         }
         return "redirect:/book/list";
+    }
+
+    @RequestMapping("book/authors")
+    String getOrderByAuthors(ModelMap model) {
+        ArrayList<HashMap> books = new ArrayList<HashMap>();
+        try {
+            int counter = 0;
+            Connection connection = getCurrentConnection();
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery("SELECT author, count(title) AS bookNumber from books group by author order by author asc;");
+            while (result.next()) {
+                HashMap<String, String> book = new HashMap<String, String>();
+                book.put("author", result.getString("author"));
+                book.put("encodedAuthor", URLEncoder.encode(result.getString("author"), "UTF-8"));
+                book.put("bookNumber", result.getString("bookNumber"));
+                counter++;
+                book.put("authorId","" + counter);
+                books.add(book);
+            }
+            model.addAttribute("books", books);
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return "authors";
+    }
+
+    @RequestMapping("book/author/{author:.+}")
+    String getOrderByAuthors(ModelMap model, @PathVariable("author") String author) {
+        ArrayList<HashMap> books = new ArrayList<HashMap>();
+        try {
+            Connection connection = getCurrentConnection();
+            Statement statement = connection.createStatement();
+            System.out.println(author);
+            String authorDecode = java.net.URLDecoder.decode(author, "UTF-8");
+            System.out.println(authorDecode);
+            ResultSet result = statement.executeQuery("select * from books where author = '" + authorDecode + "';");
+            while (result.next()) {
+                HashMap<String, String> book = new HashMap<String, String>();
+                book.put("title", result.getString("title"));
+                book.put("id", result.getString("id"));
+                books.add(book);
+            }
+            model.addAttribute("books", books);
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return "author";
     }
 
     private static Connection getCurrentConnection() {
