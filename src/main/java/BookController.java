@@ -129,7 +129,6 @@ public class BookController {
     String getOrderByAuthors(ModelMap model) {
         ArrayList<HashMap> books = new ArrayList<HashMap>();
         try {
-            int counter = 0;
             Connection connection = getCurrentConnection();
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery("SELECT author, count(title) AS bookNumber from books group by author order by author asc;");
@@ -138,8 +137,6 @@ public class BookController {
                 book.put("author", result.getString("author"));
                 book.put("encodedAuthor", URLEncoder.encode(result.getString("author"), "UTF-8"));
                 book.put("bookNumber", result.getString("bookNumber"));
-                counter++;
-                book.put("authorId","" + counter);
                 books.add(book);
             }
             model.addAttribute("books", books);
